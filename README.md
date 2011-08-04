@@ -1,3 +1,6 @@
+Ruby X11
+========
+
 (under-development) Pure Ruby implementation of the X Window System Protocol.
 This library is based off of Mathieu Bouchard's work on his RubyX11 project. 
 
