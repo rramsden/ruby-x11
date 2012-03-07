@@ -40,10 +40,13 @@ module X11
       address = TCPSocket.gethostbyname(host) if family == :Internet # this line does nothing for now
       
       auth_data = nil
-      displays.each do |entry|
-        auth_data = entry if display_id.to_i == entry.display.to_i
+
+      # with each entry from XAuthority file
+      until @file.eof?
+        r = read()
+        auth_data = r if display_id.to_i == f.display.to_i
       end
-      
+
       reset
       return auth_data 
     end
@@ -54,14 +57,6 @@ module X11
       auth_info << ADDRESS_TYPES[ @file.read(2).unpack('n').first ]
       4.times { length = @file.read(2).unpack('n').first; auth_info << @file.read(length).first }
       AuthInfo[*auth_info]
-    end
-
-    # returns all entries from XAuthority file
-    def displays
-      collection = []
-      collection << read while !@file.eof?
-      reset
-      collection 
     end
 
     def reset
