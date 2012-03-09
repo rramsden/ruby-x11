@@ -6,7 +6,7 @@
 
 module X11
   class Auth
-  
+
     FAILED = 0
     AUTHENTICATE = 1
     SUCCESS = 2
@@ -23,22 +23,22 @@ module X11
     }
 
     AuthInfo = Struct.new :family, :address, :display, :auth_name, :auth_data
-  
-    # Open an authority file, and create an object to handle it. 
-    # The filename will be taken from the XAUTHORITY environment variable, 
-    # if present, or '.Xauthority' in the user's home directory, or it may be overridden 
-    # by an argument. 
+
+    # Open an authority file, and create an object to handle it.
+    # The filename will be taken from the XAUTHORITY environment variable,
+    # if present, or '.Xauthority' in the user's home directory, or it may be overridden
+    # by an argument.
     def initialize(path = ENV['XAUTHORITY'] || ENV['HOME'] + "/Xauthority")
       @file = File.open(path)
     end
 
-    # Get authentication data for a connection of type family to display display_id on host. 
-    # If family is 'Internet', the host will be translated into an appropriate address by gethostbyname(). 
+    # Get authentication data for a connection of type family to display display_id on host.
+    # If family is 'Internet', the host will be translated into an appropriate address by gethostbyname().
     # If no data is found, returns nil
     def get_by_hostname(host, family, display_id)
       host = `hostname`.chomp if host == 'localhost' or host == '127.0.0.1'
       address = TCPSocket.gethostbyname(host) if family == :Internet # this line does nothing for now
-      
+
       auth_data = nil
 
       # with each entry from XAuthority file
@@ -48,9 +48,9 @@ module X11
       end
 
       reset
-      return auth_data 
+      return auth_data
     end
-  
+
     # returns one entry from Xauthority file
     def read
       auth_info = []

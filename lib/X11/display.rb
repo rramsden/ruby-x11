@@ -5,7 +5,7 @@ module X11
     def initialize(target = ENV['DISPLAY'])
       target =~ /^([\w.-]*):(\d+)(?:.(\d+))?$/
       host, display_id, screen_id = $1, $2, $3
-      family = nil      
+      family = nil
 
       if host.empty?
         @socket = UNIXSocket.new("/tmp/.X11-unix/X#{display_id}")
@@ -13,7 +13,7 @@ module X11
         host = nil
       else
         @socket = TCPSocket.new(host,6000+display_id)
-        family = :Internet  
+        family = :Internet
       end
 
       authorize(host, family, display_id)
@@ -33,7 +33,7 @@ private
       auth_name, auth_data = auth_info.address, auth_info.auth_data
       puts auth_name
       puts auth_data
-      
+
       @socket.write([
         Protocol::BYTE_ORDER,
         Protocol::MAJOR,
@@ -53,7 +53,7 @@ private
         when X11::Auth::AUTHENTICATE
           raise "Connection requires authentication"
         when X11::Auth::SUCCESS
-          raise "fix me"  
+          raise "fix me"
         else
           raise "received unknown opcode #{type}"
       end
