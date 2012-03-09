@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'socket'
 require 'active_support'
 require 'hexdump'

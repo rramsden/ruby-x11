@@ -1,0 +1,22 @@
+PATH
+  remote: .
+  specs:
+    ruby-x11 (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    active_support (3.0.0)
+      activesupport (= 3.0.0)
+    activesupport (3.0.0)
+    hexdump (0.2.1)
+    rake (0.9.2.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  active_support
+  hexdump
+  rake
+  ruby-x11!
