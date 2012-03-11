@@ -21,28 +21,21 @@ module X11
 
 private
 
-    # authorization packet sent to X11 server:
-    #   [:proto_major, Uint16],
-    #   [:proto_minor, Uint16],
-    #   [:auth_proto_name, Uint16, :length],
-    #   [:auth_proto_data, Uint16, :length],
-    #   [:auth_proto_name, String8],
-    #   [:auth_proto_data, String8]
     def authorize(host, family, display_id)
       auth_info = Auth.new.get_by_hostname(host||"localhost", family, display_id)
       auth_name, auth_data = auth_info.address, auth_info.auth_data
-      puts auth_name
-      puts auth_data
 
-      @socket.write([
+      handshake = Packet::ClientHandshake.create(
         Protocol::BYTE_ORDER,
         Protocol::MAJOR,
         Protocol::MINOR,
         auth_name.length,
         auth_data.length,
-        X11::pad(auth_name),
-        X11::pad(auth_data)
-      ].pack("A2 SS SS xx") + X11::pad(auth_name) + X11::pad(auth_data))
+        auth_name,
+        auth_data
+      )
+
+      @socket.write(handshake)
 
       case @socket.read(1).unpack("w").first
         when X11::Auth::FAILED
@@ -53,10 +46,11 @@ private
         when X11::Auth::AUTHENTICATE
           raise "Connection requires authentication"
         when X11::Auth::SUCCESS
-          raise "fix me"
+          puts "CONNECTION SUCCESS"
         else
           raise "received unknown opcode #{type}"
       end
+
     end
   end
 end

@@ -6,10 +6,9 @@
 
 module X11
   class Auth
-
     FAILED = 0
-    AUTHENTICATE = 1
-    SUCCESS = 2
+    SUCCESS = 1
+    AUTHENTICATE = 2
 
     ADDRESS_TYPES = {
       256 => :Local,
@@ -55,7 +54,12 @@ module X11
     def read
       auth_info = []
       auth_info << ADDRESS_TYPES[ @file.read(2).unpack('n').first ]
-      4.times { length = @file.read(2).unpack('n').first; auth_info << @file.read(length).first }
+
+      4.times do
+        length = @file.read(2).unpack('n').first
+        auth_info << @file.read(length)
+      end
+
       AuthInfo[*auth_info]
     end
 
