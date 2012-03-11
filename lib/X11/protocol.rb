@@ -1,4 +1,8 @@
 module X11
+
+  class ProtocolError < X11Error; end
+  class ByteOrderError < ProtocolError; end
+
   class Protocol
 
     # endiness of your machine
@@ -8,7 +12,7 @@ module X11
       when "\1\0\0\0"
         "l"
       else
-        raise "Cannot determine byte order"
+        raise ByteOrderError.new "Cannot determine byte order"
     end
 
     MAJOR = 11

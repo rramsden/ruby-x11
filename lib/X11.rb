@@ -10,4 +10,7 @@ module X11
   # of 4 bytes. For instance, C<pack(padded('Hello'), 'Hello')> gives
   # C<"Hello\0\0\0">.
   def self.pad(x);  x + "\0"*(-x.length & 3); end
+
+  class X11Error < StandardError; end
+  class X11Exception < RuntimeException; end
 end
