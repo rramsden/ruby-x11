@@ -6,6 +6,8 @@ module X11
       attr_reader :packet
       @@fields = []
 
+      # Takes a list of ruby objects and encodes them
+      # to binary data-types defined in X11::Encode
       def self.create(*values)
         @@fields.map do |name, type|
           if :static == name
@@ -21,6 +23,22 @@ module X11
       end
     end
 
+    # Information sent by the client at connection setup
+    #
+    # 1                        byte-order
+    #      #x42    MSB first
+    #      #x6C    LSB first
+    # 1                        unused
+    # 2    CARD16              protocol-major-version
+    # 2    CARD16              protocol-minor-version
+    # 2    n                   length of authorization-protocol-name
+    # 2    d                   length of authorization-protocol-data
+    # 2                        unused
+    # n    STRING8             authorization-protocol-name
+    # p                        unused, p=pad(n)
+    # d    STRING8             authorization-protocol-data
+    # q                        unused, q=pad(d)
+    #
     class ClientHandshake < BasePacket
       field :byte_order, Uint8
       field :static, "\x00"
