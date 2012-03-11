@@ -53,8 +53,7 @@ module X11
 
     # returns one entry from Xauthority file
     def read
-      auth_info = []
-      auth_info << ADDRESS_TYPES[ @file.read(2).unpack('n').first ]
+      auth_info = [] << ADDRESS_TYPES[ @file.read(2).unpack('n').first ]
       4.times { length = @file.read(2).unpack('n').first; auth_info << @file.read(length).first }
       AuthInfo[*auth_info]
     end
