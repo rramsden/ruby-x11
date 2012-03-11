@@ -2,8 +2,6 @@ module X11
   module Packet
     class BasePacket
       include X11::Encode
-
-      attr_reader :packet
       @@fields = []
 
       # Takes a list of ruby objects and encodes them
