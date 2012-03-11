@@ -1,7 +1,16 @@
+# This module is used for encoding Ruby Objects to binary
+# data. The types Int8, Int16, etc. are data-types defined
+# in the X11 protocol. We wrap each data-type in a lambda expression
+# which gets evaluated when a packet is created.
+#
+# EXAMPLE:
+#   Int8.call(255)        => "\xFF"
+#   String8.call("hello") => "hxello\u0000\u0000\u0000"
+
 module X11
-  # used to encode plain data into
-  # binary data which the X11 protocol can read
   module Encode
+    # Takes an object and uses Array#pack to
+    # convert it into binary data
     def self.pack(a)
       lambda {|value| [value].pack(a)}
     end
