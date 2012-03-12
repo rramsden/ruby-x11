@@ -35,13 +35,13 @@ module X11
     #
     class ClientHandshake < BasePacket
       field :byte_order, Uint8
-      field :static, "\x00"
+      field :static, Unused 
       field :proto_version_major, Uint16
       field :proto_version_minor, Uint16
       field :auth_proto_name_length, Uint16
       field :auth_proto_data_length, Uint16
-      field :static, "\x00"
-      field :static, "\x00"
+      field :static, Unused
+      field :static, Unused
       field :auth_proto_name, String8
       field :auth_proto_data, String8
     end

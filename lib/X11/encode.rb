@@ -19,6 +19,7 @@ module X11
     # For instance, C<pack(padded('Hello'), 'Hello')> gives C<"Hello\0\0\0">.
     def self.pad(x);  x + "\0"*(-x.length & 3); end
 
+    Unused    = "\x00"
     Int8      = pack("c")
     Int16     = pack("s")
     Int32     = pack("l")
