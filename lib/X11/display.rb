@@ -1,8 +1,8 @@
 module X11
 
   class DisplayError < X11Error; end
-  class ConnectionError < DisplayError; end
-  class AuthorizationError < ConnectionError; end
+  class ConnectionError < X11Error; end
+  class AuthorizationError < X11Error; end
 
   class Display
 
