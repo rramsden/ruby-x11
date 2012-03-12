@@ -1,4 +1,16 @@
 module X11
+
+  class DisplayException < X11Exception; end
+  class ConnectionException < DisplayException; end
+
+  class AuthorizationException < ConnectionException
+    attr_reader :errorcode
+    def initialize msg, errcode=nil
+      super msg
+      @errorcode = errcode
+    end
+  end
+
   class Display
 
     # Open a connection to the specified display (numbered from 0) on the specified host
@@ -42,13 +54,13 @@ private
           len, major, minor, xlen = @socket.read(7).unpack("CSSS")
           reason = @socket.read(xlen * 4)
           reason = reason[0..len] 
-          raise "Connection to server failed -- (version #{major}.#{minor}) #{reason}"
+          raise AuthorizationException.new "Connection to server failed -- (version #{major}.#{minor}) #{reason}", X11::Auth::FAILED
         when X11::Auth::AUTHENTICATE
-          raise "Connection requires authentication"
+          raise AuthorizationException.new "Connection requires authentication", X11::Auth::AUTHENTICATE
         when X11::Auth::SUCCESS
           puts "CONNECTION SUCCESS"
         else
-          raise "received unknown opcode #{type}"
+          raise AuthorizationException.new "Received unknown opcode #{type}" 
       end
 
     end

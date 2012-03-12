@@ -7,7 +7,7 @@ module X11
       when "\1\0\0\0"
         "l".ord
       else
-        raise "Cannot determine byte order"
+        raise ByteOrderError.new "Cannot determine byte order"
     end
 
     MAJOR = 11
