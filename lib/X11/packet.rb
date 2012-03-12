@@ -8,11 +8,7 @@ module X11
       # to binary data-types defined in X11::Encode
       def self.create(*values)
         @@fields.map do |name, type|
-          if :static == name
-            type
-          else
-            type.call(values.shift)
-          end
+          name == :static ? type : type.call( values.shift )
         end.join
       end
 
