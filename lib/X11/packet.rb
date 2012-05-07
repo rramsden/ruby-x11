@@ -2,22 +2,61 @@ module X11
   module Packet
     class BasePacket
       include X11::Encode
-      @@fields = []
 
-      # Takes a list of ruby objects and encodes them
-      # to binary data-types defined in X11::Encode
-      def self.create(*values)
-        @@fields.map do |name, type|
-          if :static == name
-            type
-          else
-            type.call(values.shift)
+      @@struct = []
+
+      class << self
+        def create(*values)
+          lengths = lengths_for(values)
+
+          packet = @@struct.map do |tuple|
+            type, name, encode_fun = tuple
+
+            case type
+            when :field
+              encode_fun.call(values.shift)
+            when :length
+              encode_fun.call(lengths[name])
+            when :unused
+              name
+            end
+
           end
-        end.join
-      end
+          packet.join
+        end
 
-      def self.field(name, type)
-        @@fields.push([name, type])
+        def field(name, encode_fun)
+          @@struct.push([:field, name, encode_fun])
+        end
+
+        def unused(size)
+          @@struct.push([:unused, "\x00" * size])
+        end
+
+        def length(name, encode_fun)
+          @@struct.push([:length, name, encode_fun])
+        end
+
+        private
+
+        def lengths_for(args)
+          args = args.dup
+          lengths = {}
+
+          fields.each do |type, name, klass|
+            value = args.shift
+            lengths[name] = value.size if value.is_a?(String)
+          end
+
+          return lengths
+        end
+
+        def fields
+          @@struct.dup.delete_if do |type,name,klass|
+            type == :unused or type == :length
+          end
+        end
+
       end
     end
 
@@ -36,16 +75,15 @@ module X11
     # p                        unused, p=pad(n)
     # d    STRING8             authorization-protocol-data
     # q                        unused, q=pad(d)
-    #
+
     class ClientHandshake < BasePacket
       field :byte_order, Uint8
-      field :static, "\x00"
-      field :proto_version_major, Uint16
-      field :proto_version_minor, Uint16
-      field :auth_proto_name_length, Uint16
-      field :auth_proto_data_length, Uint16
-      field :static, "\x00"
-      field :static, "\x00"
+      unused 1
+      field :protocol_major_version, Uint16
+      field :protocol_minor_version, Uint16
+      length :auth_proto_name, Uint16
+      length :auth_proto_data, Uint16
+      unused 1
       field :auth_proto_name, String8
       field :auth_proto_data, String8
     end

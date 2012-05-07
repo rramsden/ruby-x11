@@ -24,7 +24,7 @@ module X11
       authorize(host, family, display_id)
     end
 
-private
+    private
 
     def authorize(host, family, display_id)
       auth_info = Auth.new.get_by_hostname(host||"localhost", family, display_id)
@@ -34,8 +34,6 @@ private
         Protocol::BYTE_ORDER,
         Protocol::MAJOR,
         Protocol::MINOR,
-        auth_name.length,
-        auth_data.length,
         auth_name,
         auth_data
       )
@@ -43,17 +41,17 @@ private
       @socket.write(handshake)
 
       case @socket.read(1).unpack("w").first
-        when X11::Auth::FAILED
-          len, major, minor, xlen = @socket.read(7).unpack("CSSS")
-          reason = @socket.read(xlen * 4)
-          reason = reason[0..len]
-          raise AuthorizationError, "Connection to server failed -- (version #{major}.#{minor}) #{reason}"
-        when X11::Auth::AUTHENTICATE
-          raise AuthorizationError, "Connection requires authentication"
-        when X11::Auth::SUCCESS
-          puts "CONNECTION SUCCESS"
-        else
-          raise AuthorizationError, "Received unknown opcode #{type}"
+      when X11::Auth::FAILED
+        len, major, minor, xlen = @socket.read(7).unpack("CSSS")
+        reason = @socket.read(xlen * 4)
+        reason = reason[0..len]
+        raise AuthorizationError, "Connection to server failed -- (version #{major}.#{minor}) #{reason}"
+      when X11::Auth::AUTHENTICATE
+        raise AuthorizationError, "Connection requires authentication"
+      when X11::Auth::SUCCESS
+        puts "SUCCESS"
+      else
+        raise AuthorizationError, "Received unknown opcode #{type}"
       end
 
     end
