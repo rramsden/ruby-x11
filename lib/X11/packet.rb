@@ -83,7 +83,7 @@ module X11
       field :protocol_minor_version, Uint16
       length :auth_proto_name, Uint16
       length :auth_proto_data, Uint16
-      unused 1
+      unused 2
       field :auth_proto_name, String8
       field :auth_proto_data, String8
     end
