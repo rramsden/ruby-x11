@@ -54,6 +54,9 @@ module X11
         raise AuthorizationError, "Received unknown opcode #{type}"
       end
 
+      @socket.read(7)
+
+      puts Packet::DisplayInfo.read(@socket).inspect
     end
   end
 end
