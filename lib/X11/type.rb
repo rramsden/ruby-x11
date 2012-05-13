@@ -35,7 +35,6 @@ module X11
     KeyCode      = Uint8
     Signifigance = Uint8
     Bool         = Uint8
-
     Bitmask      = Uint32
     Window       = Uint32
     Pixmap       = Uint32
@@ -50,8 +49,8 @@ module X11
     VisualID     = Uint32
     EventMask    = Uint32
 
-    # Strings are "Special" in X11 they are a list
-    # data type but their padded
+    # Strings are "Special" in X11 they need
+    # their own class unfortunately since strings are padded
     class String8
       def self.pack(x)
         x + "\x00"*(-x.length & 3)
@@ -62,16 +61,6 @@ module X11
         unused_padding = (4 - (size % 4)) % 4
         socket.read(unused_padding)
         val
-      end
-    end
-
-    # List.of(Foo)
-    # In this document the List.of notation strictly means some number of
-    # repetitions of the FOO encoding; the actual length of the list is encoded
-    # elsewhere
-
-    class List
-      def self.of(type)
       end
     end
 

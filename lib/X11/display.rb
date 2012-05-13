@@ -24,6 +24,12 @@ module X11
       authorize(host, family, display_id)
     end
 
+    def screens
+      @internal[:screens].map do |s|
+        Screen.new(self, s)
+      end
+    end
+
     private
 
     def authorize(host, family, display_id)
@@ -49,14 +55,11 @@ module X11
       when X11::Auth::AUTHENTICATE
         raise AuthorizationError, "Connection requires authentication"
       when X11::Auth::SUCCESS
-        puts "SUCCESS"
+        @socket.read(7) # skip unused bytes
+        @internal = Packet::DisplayInfo.read(@socket)
       else
         raise AuthorizationError, "Received unknown opcode #{type}"
       end
-
-      @socket.read(7)
-
-      puts Packet::DisplayInfo.read(@socket).inspect
     end
   end
 end
