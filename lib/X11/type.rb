@@ -32,25 +32,6 @@ module X11
     define "Uint16", "S", 2
     define "Uint32", "L", 4
 
-    KeyCode      = Uint8
-    Signifigance = Uint8
-    Bool         = Uint8
-    Bitmask      = Uint32
-    Window       = Uint32
-    Pixmap       = Uint32
-    Cursor       = Uint32
-    Colornum     = Uint32
-    Font         = Uint32
-    Gcontext     = Uint32
-    Colormap     = Uint32
-    Drawable     = Uint32
-    Fontable     = Uint32
-    Atom         = Uint32
-    VisualID     = Uint32
-    EventMask    = Uint32
-
-    # Strings are "Special" in X11 they need
-    # their own class unfortunately since strings are padded
     class String8
       def self.pack(x)
         x + "\x00"*(-x.length & 3)
@@ -63,6 +44,27 @@ module X11
         val
       end
     end
+
+    KeyCode      = Uint8
+    Signifigance = Uint8
+    Bool         = Uint8
+    BitGravity   = Uint8
+    WinGravity   = Uint8
+    BackingStore = Uint8
+    Bitmask      = Uint32
+    Window       = Uint32
+    Pixmap       = Uint32
+    Cursor       = Uint32
+    Colornum     = Uint32
+    Font         = Uint32
+    Gcontext     = Uint32
+    Colormap     = Uint32
+    Drawable     = Uint32
+    Fontable     = Uint32
+    Atom         = Uint32
+    VisualID     = Uint32
+    Mask         = Uint32
+    Timestamp    = Uint32
 
   end
 end
