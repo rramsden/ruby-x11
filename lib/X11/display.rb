@@ -61,5 +61,9 @@ module X11
         raise AuthorizationError, "Received unknown opcode #{type}"
       end
     end
+
+    def to_s
+      "#<X11::Display:0x#{object_id.to_s(16)} screens=#{@internal.screens.size}>"
+    end
   end
 end
