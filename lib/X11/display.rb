@@ -31,6 +31,19 @@ module X11
       end
     end
 
+    ##
+    # The resource-id-mask contains a single contiguous set of bits (at least 18).
+    # The client allocates resource IDs for types WINDOW, PIXMAP, CURSOR, FONT,
+    # GCONTEXT, and COLORMAP by choosing a value with only some subset of these
+    # bits set and ORing it with resource-id-base.
+
+    def new_id
+      id = (@xid_next ||= 0)
+      @xid_next += 1
+
+      (id & @internal.resource_id_mask) | @internal.resource_id_base
+    end
+
     private
 
     def authorize(host, family, display_id)
