@@ -25,7 +25,7 @@ module X11
             end
           end
 
-          packet.join
+          ((@opcode ? [X11::Type::Int8.pack(@opcode)] : []) + packet).join
         end
 
         def read(socket)
@@ -71,6 +71,10 @@ module X11
 
           @structs ||= []
           @structs << s
+        end
+
+        def opcode(value)
+          @opcode = value
         end
 
         private
