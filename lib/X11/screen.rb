@@ -8,11 +8,15 @@ module X11
     end
 
     def width
-      @internal[:width_in_pixels]
+      @internal.width_in_pixels
     end
 
     def height
-      @internal[:height_in_pixels]
+      @internal.height_in_pixels
+    end
+
+    def to_s
+      "#<X11::Screen(#{id}) width=#{width} height=#{height}>"
     end
   end
 end

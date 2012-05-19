@@ -5,6 +5,7 @@ module X11
   class AuthorizationError < X11Error; end
 
   class Display
+    attr_accessor :socket
 
     # Open a connection to the specified display (numbered from 0) on the specified host
     def initialize(target = ENV['DISPLAY'])
@@ -25,7 +26,7 @@ module X11
     end
 
     def screens
-      @internal[:screens].map do |s|
+      @internal.screens.map do |s|
         Screen.new(self, s)
       end
     end

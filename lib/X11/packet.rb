@@ -50,7 +50,7 @@ module X11
             end
           end
 
-          values
+          OpenStruct.new(values)
         end
 
         def field(*args)
@@ -92,9 +92,7 @@ module X11
             s.type == :unused or s.type == :length
           end
         end
-
       end
     end
-
   end
 end
