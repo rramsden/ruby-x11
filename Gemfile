@@ -4,4 +4,7 @@ gemspec
 
 gem 'rake'
 gem 'active_support'
-gem 'hexdump'
+
+group :development do
+  gem "hexdump"
+end
